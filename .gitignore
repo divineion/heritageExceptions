@@ -1,0 +1,7 @@
+/bin/
+
+#IDE conf files
+.project
+.classpath
+.settings/
+.metadata/
