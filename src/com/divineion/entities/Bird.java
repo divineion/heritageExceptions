@@ -11,14 +11,14 @@ public class Bird extends Animal {
 
 	public Bird(String name, String espece, int age, int numberOfFeathers) throws PositiveIntegerValueRequiredException, EmptyValueException, TooShortValueException, NameFormatException {
 		super(name, espece, age);
-		this.numberOfFeathers = numberOfFeathers;
+		setNumberOfFeathers(numberOfFeathers);
 	}
 	
 	public int getNumberOfFeathers() {
 		return numberOfFeathers;
 	}
 
-	public void setNombreDePlumes(int numberOfFeathers) throws NumberFormatException, PositiveIntegerValueRequiredException {
+	public void setNumberOfFeathers(int numberOfFeathers) throws NumberFormatException, PositiveIntegerValueRequiredException {
 		BirdValidator.validateNumberOfFeathers(numberOfFeathers);
 		this.numberOfFeathers = numberOfFeathers;
 	}
