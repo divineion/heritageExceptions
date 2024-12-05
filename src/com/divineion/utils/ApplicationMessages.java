@@ -11,5 +11,5 @@ public class ApplicationMessages {
 	public static final String VALUE_TOO_SHORT = "Le nombre de caractères saisis est insuffisant.";
 	public static final  String CAPITALIZED_REQUIRED = "La saisie doit commencer par une majuscule";
 	
-	public static final String END_OF_PROGRAMM = "Fin du programme";
+	public static final String END_OF_PROGRAM = "Fin du programme";
 }
