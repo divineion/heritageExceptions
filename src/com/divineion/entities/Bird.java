@@ -2,16 +2,15 @@ package com.divineion.entities;
 
 import com.divineion.utils.exceptions.EmptyValueException;
 import com.divineion.utils.exceptions.NameFormatException;
-import com.divineion.utils.exceptions.PositiveValueRequiredException;
+import com.divineion.utils.exceptions.PositiveIntegerValueRequiredException;
 import com.divineion.utils.exceptions.TooShortValueException;
 import com.divineion.utils.validators.BirdValidator;
 
 public class Bird extends Animal {
 	private int numberOfFeathers;
 
-	public Bird(String name, String espece, int age, int numberOfFeathers) throws PositiveValueRequiredException, EmptyValueException, TooShortValueException, NameFormatException {
+	public Bird(String name, String espece, int age, int numberOfFeathers) throws PositiveIntegerValueRequiredException, EmptyValueException, TooShortValueException, NameFormatException {
 		super(name, espece, age);
-		BirdValidator.validateNumberOfFeathers(numberOfFeathers);
 		this.numberOfFeathers = numberOfFeathers;
 	}
 	
@@ -19,10 +18,8 @@ public class Bird extends Animal {
 		return numberOfFeathers;
 	}
 
-	public void setNombreDePlumes(int numberOfFeathers) throws NumberFormatException {
-		if (numberOfFeathers < 0) {
-			
-		}
+	public void setNombreDePlumes(int numberOfFeathers) throws NumberFormatException, PositiveIntegerValueRequiredException {
+		BirdValidator.validateNumberOfFeathers(numberOfFeathers);
 		this.numberOfFeathers = numberOfFeathers;
 	}
 	
