@@ -2,7 +2,7 @@ package com.divineion.entities;
 
 import com.divineion.utils.exceptions.EmptyValueException;
 import com.divineion.utils.exceptions.NameFormatException;
-import com.divineion.utils.exceptions.PositiveValueRequiredException;
+import com.divineion.utils.exceptions.PositiveIntegerValueRequiredException;
 import com.divineion.utils.exceptions.TooShortValueException;
 import com.divineion.utils.validators.AnimalValidator;
 
@@ -18,12 +18,10 @@ public abstract class Animal {
 	protected String species;
 	protected int age;
 	
-	public Animal(String name, String species, int age) throws PositiveValueRequiredException, EmptyValueException, TooShortValueException, NameFormatException {
-		AnimalValidator.validateAnimalAge(age);
-		AnimalValidator.validateAnimalName(name);
-		this.name = name;
-		this.species = species;
-		this.age = age;
+	public Animal(String name, String species, int age) throws PositiveIntegerValueRequiredException, EmptyValueException, TooShortValueException, NameFormatException {
+		setName(name);
+		setSpecies(species);
+		setAge(age);
 	}
 
 	/**
@@ -51,8 +49,12 @@ public abstract class Animal {
 	/**
 	 * Define the name of the animal
 	 * @param nom
+	 * @throws NameFormatException 
+	 * @throws TooShortValueException 
+	 * @throws EmptyValueException 
 	 */
-	public void setName(String name) {
+	public void setName(String name) throws EmptyValueException, TooShortValueException, NameFormatException {
+		AnimalValidator.validateAnimalName(name);
 		this.name = name;
 	}
 	
@@ -67,8 +69,10 @@ public abstract class Animal {
 	/**
 	 * Define the age of the animal
 	 * @param age
+	 * @throws PositiveIntegerValueRequiredException 
 	 */
-	public void setAge(int age) {
+	public void setAge(int age) throws PositiveIntegerValueRequiredException {
+		AnimalValidator.validateAnimalAge(age);
 		this.age = age;
 	}
 	
