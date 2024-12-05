@@ -4,35 +4,47 @@ import java.util.Scanner;
 
 import com.divineion.entities.*;
 import com.divineion.utils.ApplicationMessages;
-import com.divineion.utils.exceptions.AnimalBreedException;
 import com.divineion.utils.exceptions.EmptyValueException;
 import com.divineion.utils.exceptions.NameFormatException;
-import com.divineion.utils.exceptions.PositiveValueRequiredException;
+import com.divineion.utils.exceptions.PositiveIntegerValueRequiredException;
 import com.divineion.utils.exceptions.TooShortValueException;
+import com.divineion.utils.validators.AnimalValidator;
+import com.divineion.utils.validators.BirdValidator;
+import com.divineion.utils.validators.DogValidator;
 
 
 public class Main {
 	static boolean exit = false;
-
-	public static void main(String[] args) throws PositiveValueRequiredException {		
-		Scanner scanner = new Scanner(System.in);	
-		
-			while (exit == false) {
+	
+	public static void createDog() throws PositiveIntegerValueRequiredException, EmptyValueException, TooShortValueException, NameFormatException {
+		try {
+			Dog chien = new Dog("Gfjf", "Chien", 5, "pit");
+			System.out.println(chien);
+		}
+		catch(TooShortValueException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+	
+	public static void main(String[] args) {	
+		Scanner scanner = new Scanner(System.in);
+			
+			while (!exit) {
 				try {
 					System.out.println("Voulez-vous rentrer un chien, un oiseau, ou voulez-vous interrompre la saisie ? Saisir \"chien\", \"oiseau\" ou \"fin\"");
-					String action = scanner.nextLine();
+					String select = scanner.nextLine();
 
-					switch (action) {
+					switch (select) {
 						case "chien": {
-							handleDog(action, scanner);
+							exit = handleDog(select, scanner);
 							break;
 						}
 						case "oiseau": {
-							handleBird(action, scanner);
+							exit = handleBird(select, scanner);
 							break;
 						}
 						case "fin": {
-							System.out.println(ApplicationMessages.END_OF_PROGRAMM);
+							System.out.println(ApplicationMessages.END_OF_PROGRAM);
 							exit = true;
 							break;
 						}
@@ -43,24 +55,45 @@ public class Main {
 					} 
 				}
 				catch(Exception e) {
-					System.out.println(e);
+					System.out.println("Une erreur inattendue est survenue  :"+ e.getMessage());
 				}
 			}
+			
+			AnimalsList.listAllAnimals();
+
 		}
 	
-	public static boolean handleDog(String action, Scanner scanner) throws PositiveValueRequiredException, AnimalBreedException, EmptyValueException, TooShortValueException, NameFormatException {
-		
+	/**
+	 * @param select : the user's choice from the start of the while loop (should be "chien")
+	 * @param scanner : Scanner object to capture user input
+	 * @return boolean : returns true to end the main program loop ; false to continue
+	 * @throws PositiveIntegerValueRequiredException  : if a required number value is negative or decimal
+	 * @throws EmptyValueException : if a required value is empty
+	 * @throws TooShortValueException : name or breed shorter than 3 characters
+	 * @throws NameFormatException : name does not start with an uppercase letter
+	 * 
+	 * 
+	 * Steps : 
+	 *  - prompts the user for the Dog's detail (name, age, breed);
+	 *  - validates input in real-time;
+	 *  - creates a Dog object and add it to the AnimalsList;
+	 *  - allows the user to continue entering new animals or end the program.
+	 */
+	public static boolean handleDog(String select, Scanner scanner)  {
 		try {
-		String species = action;
+		String species = select;
 		
-		System.out.println("Veuillez saisir le nom du chien (minimum 3 lettres)");
+		System.out.println("Veuillez saisir le nom du chien (minimum 3 caractères, commence par une majuscule)");
 		String name = scanner.nextLine();
+		AnimalValidator.validateAnimalName(name);
 		
 		System.out.println("Veuillez saisir l'âge du chien en années arrondi à l'entier inférieur");
 		int age = Integer.parseInt(scanner.nextLine());
+		AnimalValidator.validateAnimalAge(age);
 		
 		System.out.println("Veuillez saisir la race du chien");
 		String breed = scanner.nextLine();
+		DogValidator.validateDogBreed(breed);
 		
 		Animal dog = new Dog(name, species, age, breed);
 		System.out.println(dog);
@@ -70,33 +103,54 @@ public class Main {
 		
 		if (confirmation.equals("OK")) {
 			AnimalsList.addAnimal(dog);
-			System.out.println(ApplicationMessages.END_OF_PROGRAMM);
-			return exit = true;
+			System.out.println(ApplicationMessages.END_OF_PROGRAM);
+			return true;
 		} else if (confirmation.equals("fin")) {
-			System.out.println(ApplicationMessages.END_OF_PROGRAMM);
-			return exit = true;
+			System.out.println(ApplicationMessages.END_OF_PROGRAM);
+			return true;
 		} 
 		AnimalsList.addAnimal(dog);
 		AnimalsList.listAllAnimals();
-		return exit = false;
+		return false;
 		}
-		catch(Exception e) {
+		catch(PositiveIntegerValueRequiredException | EmptyValueException | TooShortValueException| NameFormatException e) {
 			System.out.println(e);
 		}
-		return exit;
+		catch (NumberFormatException e) {
+			System.out.println(ApplicationMessages.ANIMAL_AGE_ERROR + "un nombre entier est requis");		}
+		return false;
 	};
 	
-	public static boolean handleBird(String action, Scanner scanner) {
-		String species = action;
+	/**
+	 * @param select : the user's choice from the start of the while loop (should be "oiseau")
+	 * @param scanner : Scanner object to capture user input
+	 * @return boolean : returns true to end the main program loop ; false to continue
+	 * @throws PositiveIntegerValueRequiredException  : if age or numberOfFeathers value is negative or decimal
+	 * @throws EmptyValueException : if a required value is empty
+	 * @throws TooShortValueException : name shorter than 3 characters
+	 * @throws NameFormatException : name does not start with an uppercase letter
+	 * 
+	 * 
+	 * Steps : 
+	 *  - prompts the user for the Bird's detail (name, age, numberOfFeathers);
+	 *  - validates input in real-time;
+	 *  - creates a Dog object and add it to the AnimalsList;
+	 *  - allows the user to continue entering new animals or end the program.
+	 */
+	public static boolean handleBird(String select, Scanner scanner) {
+		String species = select;
 		try {
-			System.out.println("Veuillez saisir le nom de l'oiseau (minimum 3 lettres)");
+			System.out.println("Veuillez saisir le nom de l'oiseau (minimum 3 caractères, commence par une majuscule)");
 			String name = scanner.nextLine();
+			AnimalValidator.validateAnimalName(name);
 			
 			System.out.println("Veuillez saisir l'âge de l'oiseau arrondi à l'entier inférieur");
 			int age = Integer.parseInt(scanner.nextLine());
+			AnimalValidator.validateAnimalAge(age);
 			
 			System.out.println("Veuillez saisir le nombre de plumes de l'animal");
 			int feathers = Integer.parseInt(scanner.nextLine());
+			BirdValidator.validateNumberOfFeathers(feathers);
 			
 			Animal bird = new Bird(name, species, age, feathers);
 			System.out.println(bird);
@@ -106,18 +160,21 @@ public class Main {
 			
 			if (confirmation.equals("OK")) {
 				AnimalsList.addAnimal(bird);
-				System.out.println(ApplicationMessages.END_OF_PROGRAMM);
-				return exit = true;
+				System.out.println(ApplicationMessages.END_OF_PROGRAM);
+				return true;
 			} else if (confirmation.equals("fin")) {
-				System.out.println(ApplicationMessages.END_OF_PROGRAMM);
-				return exit = true;
+				System.out.println(ApplicationMessages.END_OF_PROGRAM);
+				return true;
 			}
 			AnimalsList.addAnimal(bird);
 			AnimalsList.listAllAnimals();
-			return exit = false;
+			return false;
 		} 
-		catch(Exception e) {
-			System.out.println(e);
+		catch(PositiveIntegerValueRequiredException | EmptyValueException | TooShortValueException | NameFormatException e) {
+			System.out.println(e.getMessage());
+		}
+		catch (NumberFormatException e) {
+			System.out.println("Erreur -> les champs \"âge\" et \"nombre de plumes\" requièrent des nombres entiers.");
 		}
 		
 		return exit;
