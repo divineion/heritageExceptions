@@ -3,13 +3,13 @@ package com.divineion.utils.validators;
 import com.divineion.utils.ApplicationMessages;
 import com.divineion.utils.exceptions.EmptyValueException;
 import com.divineion.utils.exceptions.NameFormatException;
-import com.divineion.utils.exceptions.PositiveValueRequiredException;
+import com.divineion.utils.exceptions.PositiveIntegerValueRequiredException;
 import com.divineion.utils.exceptions.TooShortValueException;
 
 public class AnimalValidator {
-	public static void validateAnimalAge(int age) throws PositiveValueRequiredException {
+	public static void validateAnimalAge(int age) throws PositiveIntegerValueRequiredException {
 		if (age < 0) {
-			throw new PositiveValueRequiredException("Erreur -> âge de l'animal : " + ApplicationMessages.POSITIVE_VALUE_REQUIRED);
+			throw new PositiveIntegerValueRequiredException("Erreur -> âge de l'animal : " + ApplicationMessages.POSITIVE_VALUE_REQUIRED);
 		}
 	}
 	
